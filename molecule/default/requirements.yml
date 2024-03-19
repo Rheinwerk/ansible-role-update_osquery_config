@@ -1,0 +1,3 @@
+- src: https://github.com/Rheinwerk/ansible-role-osquery.git
+  name: osquery
+  scm: git
