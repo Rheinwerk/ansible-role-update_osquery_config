@@ -1,0 +1,14 @@
+---
+_osquery:
+  config:
+    schedule:
+      instance_info:
+        query: 'SELECT m.instance_id,m.instance_type,m.local_ipv4,m.ami_id,m.availability_zone,m.region,ki.version as kernel_version,ki.path as kernel_image, u.total_seconds as uptime_seconds, os.name as os_name, os.version as os_version FROM kernel_info ki LEFT JOIN ec2_instance_metadata m LEFT JOIN uptime u LEFT JOIN os_version os;'
+        # 43200s = 12h
+        interval: 43200
+        snapshot: True
+      software_versions:
+        query: 'SELECT * from deb_packages;'
+        # 43200s = 12h
+        interval: 43200
+        snapshot: True
