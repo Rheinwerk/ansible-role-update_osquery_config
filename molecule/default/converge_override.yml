@@ -1,0 +1,6 @@
+---
+# skip idempotence tests
+- name: Include osquery install role
+  ansible.builtin.include_role:
+    name: osquery
+  when: "'molecule-idempotence-notest' not in ansible_skip_tags"
