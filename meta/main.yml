@@ -1,7 +1,6 @@
 ---
 galaxy_info:
-  author: Michael Schmitz
-  namespace: rheinwerk
+  author: rheinwerk
   role_name: update_osquery_config
   description: Configures osquery
   company: Rheinwerk
