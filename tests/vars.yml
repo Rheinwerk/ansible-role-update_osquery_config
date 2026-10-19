@@ -1,0 +1,17 @@
+---
+# Proves that the role renders _osquery_config: the default schedule plus a marker query. The
+# default values themselves are checked by the equivalence script in the infrastructure repository.
+_osquery_config:
+  schedule:
+    instance_info:
+      query: 'SELECT m.instance_id,m.instance_type,m.local_ipv4,m.ami_id,m.availability_zone,m.region,ki.version as kernel_version,ki.path as kernel_image, u.total_seconds as uptime_seconds, os.name as os_name, os.version as os_version FROM kernel_info ki LEFT JOIN ec2_instance_metadata m LEFT JOIN uptime u LEFT JOIN os_version os;'
+      interval: 43200
+      snapshot: true
+    software_versions:
+      query: 'SELECT * from deb_packages;'
+      interval: 43200
+      snapshot: true
+    molecule_marker:
+      query: 'SELECT 1;'
+      interval: 60
+      snapshot: true

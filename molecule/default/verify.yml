@@ -1,0 +1,21 @@
+---
+# The configuration file is the JSON rendering of _osquery_config, set in tests/vars.yml with a
+# marker query on top of the default schedule.
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Read the osquery configuration
+      ansible.builtin.slurp:
+        src: /etc/osquery/osquery.conf
+      register: verify_osquery_conf
+
+    - name: The configuration is rendered from _osquery_config
+      ansible.builtin.assert:
+        that:
+          - "'\"molecule_marker\"' in content"
+          - "'\"instance_info\"' in content"
+        fail_msg: "osquery.conf: {{ content }}"
+      vars:
+        content: "{{ verify_osquery_conf.content | b64decode }}"
