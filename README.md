@@ -16,8 +16,13 @@ The target machine must have osquery installed.
 
 Role Variables
 --------------
-There is one main variable that drives this role: `_osquery`. It is a map that contains all configuration and settings for this role.
-Please see `defaults/main.yml` for details.
+
+| Variable | Default |
+|---|---|
+| `_osquery_config` | the JSON written to `/etc/osquery/osquery.conf`: a `schedule` with the snapshot queries `instance_info` (EC2 instance, kernel, uptime and OS facts) and `software_versions` (`deb_packages`), both every 12 hours |
+
+Set `_osquery_config` to replace the whole configuration; see `defaults/main.yml` for the
+default. Until v0.1.0 the role took one `_osquery` dict with the key `config` instead.
 
 Dependencies
 ------------
@@ -28,16 +33,16 @@ None.
 Example Playbook
 ----------------
 
-The general contract of this role is to take the variables map `_osquery` from `defaults/main.yml` as a template for your configuration and pass that configuration as a parameter to this role.
-
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
     - hosts: servers
-      var:
-        OSQUERY:
-          ...
+      vars:
+        _osquery_config:
+          schedule:
+            software_versions:
+              query: 'SELECT * from deb_packages;'
+              interval: 3600
+              snapshot: true
       roles:
-         - { role: update_osquery_config, tags: [ 'filebeat' ], _osquery: "{{ OSQUERY }}" }
+         - { role: update_osquery_config, tags: [ 'osquery' ] }
 
 License
 -------
